@@ -17,11 +17,14 @@
 
   > 在 Github 上查看：https://tsch.js.org/5117/zh-CN
 */
-
 /* _____________ 你的代码 _____________ */
-
-type Without<T, U> = any
-
+// 答案
+type Without<T, U> =
+  T extends [infer R, ...infer F]
+  ? R extends (U extends any[] ? U[number] : U)
+  ? Without<F, U>
+  : [R, ...Without<F, U>]
+  : T
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
