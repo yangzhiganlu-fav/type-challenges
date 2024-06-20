@@ -17,13 +17,23 @@
 
   > 在 Github 上查看：https://tsch.js.org/5360/zh-CN
 */
+import type { Equal, Expect } from '@type-challenges/utils'
 
 /* _____________ 你的代码 _____________ */
+type Includes<T, U> = U extends [infer F, ...infer Rest]
+  ? Equal<F, T> extends true
+    ? true
+    : Includes<T, Rest>
+  : false
 
-type Unique<T> = any
+type Unique<T, U extends any[] = []> =
+  T extends [infer R, ...infer F]
+    ? Includes<R, U> extends true
+      ? Unique<F, [...U]>
+      : Unique<F, [...U, R]>
+    : U
 
 /* _____________ 测试用例 _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
   Expect<Equal<Unique<[1, 1, 2, 2, 3, 3]>, [1, 2, 3]>>,
